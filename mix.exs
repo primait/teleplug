@@ -36,7 +36,7 @@ defmodule Teleplug.MixProject do
   def package do
     [
       name: "teleplug",
-      maintainer: [],
+      maintainer: ["prima.it"],
       licences: ["MIT"],
       links: %{"Github" => "https://github.com/primait/teleplug"}
     ]

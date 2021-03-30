@@ -1,6 +1,6 @@
 # Teleplug
 
-**TODO: Add description**
+Teleplug is a dead simple opentelemetry-instrumented plug.
 
 ## Installation
 
@@ -19,3 +19,16 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/teleplug](https://hexdocs.pm/teleplug).
 
+
+## Use 
+
+In your pipeline add 
+
+```
+plug TelePlug
+```
+
+or 
+```
+plug TelePlug, service_name: "my_name"
+```

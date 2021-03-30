@@ -1,5 +1,11 @@
-defmodule TelePlug do
-  @moduledoc nil
+defmodule Teleplug do
+  @moduledoc """
+  Simple opentelementry instrumented plug.
+
+  ## Options
+
+  The only option that can be passed is the `service_name`.
+  """
 
   alias Plug.Conn
 
