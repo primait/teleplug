@@ -1,5 +1,5 @@
 defmodule TeleplugTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Plug.Test
 
   require OpenTelemetry.Tracer, as: Tracer
@@ -9,16 +9,9 @@ defmodule TeleplugTest do
 
   @span_fields Record.extract(:span, from_lib: "opentelemetry/include/otel_span.hrl")
   Record.defrecord(:span, @span_fields)
-
+  
   setup do
-    :application.stop(:opentelemetry)
-
-    :application.set_env(:opentelemetry, :processors, [
-      {:otel_batch_processor, %{scheduled_delay_ms: 1}}
-    ])
-
-    :application.start(:opentelemetry)
-
+    flush_mailbox()
     :otel_batch_processor.set_exporter(:otel_exporter_pid, self())
     :ok
   end
@@ -52,28 +45,26 @@ defmodule TeleplugTest do
         end)
     end
 
+    assert_receive {:span, span(attributes: attributes)}, 1_000
+    
+    assert Enum.all?([
+      {"http.status_code", nil},
+      {"service.name", :name},
+      {"http.method", "GET"},
+      {"http.route", "/"},
+      {"http.target", "/"},
+      {"http.host", ""},
+      {"http.scheme", :http},
+      {"http.client_ip", "127.0.0.1"},
+      {"net.host.port", 80}
+    ], & &1 in attributes)
+  end
+  
+  def flush_mailbox do
     receive do
-      {:span, span} ->
-        assert span(span, :attributes) ==
-                 [
-                   {"http.status_code", nil},
-                   {"service.name", :name},
-                   {"http.method", "GET"},
-                   {"http.route", "/"},
-                   {"http.target", "/"},
-                   {"http.host", ""},
-                   {"http.scheme", :http},
-                   {"http.flavor", ""},
-                   {"http.user_agent", ""},
-                   {"http.client_ip", "127.0.0.1"},
-                   {"net.peer.ip", "127.0.0.1"},
-                   {"net.peer.port", 111_317},
-                   {"net.host.name", "www.example.com"},
-                   {"net.host.port", 80}
-                 ]
+      _ -> flush_mailbox()
     after
-      100 ->
-        raise "Span not found"
+      10 -> :ok
     end
   end
 end

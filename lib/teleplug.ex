@@ -4,7 +4,7 @@ defmodule Teleplug do
 
   ## Options
 
-  The only option that can be passed is the `service_name`.
+  The only option that can be passed is the `service_name`, defaults on the application name
   """
 
   alias Plug.Conn
