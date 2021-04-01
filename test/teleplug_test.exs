@@ -9,7 +9,7 @@ defmodule TeleplugTest do
 
   @span_fields Record.extract(:span, from_lib: "opentelemetry/include/otel_span.hrl")
   Record.defrecord(:span, @span_fields)
-  
+
   setup do
     flush_mailbox()
     :otel_batch_processor.set_exporter(:otel_exporter_pid, self())
@@ -46,20 +46,23 @@ defmodule TeleplugTest do
     end
 
     assert_receive {:span, span(attributes: attributes)}, 1_000
-    
-    assert Enum.all?([
-      {"http.status_code", nil},
-      {"service.name", :name},
-      {"http.method", "GET"},
-      {"http.route", "/"},
-      {"http.target", "/"},
-      {"http.host", ""},
-      {"http.scheme", :http},
-      {"http.client_ip", "127.0.0.1"},
-      {"net.host.port", 80}
-    ], & &1 in attributes)
+
+    assert Enum.all?(
+             [
+               {"http.status_code", nil},
+               {"service.name", :name},
+               {"http.method", "GET"},
+               {"http.route", "/"},
+               {"http.target", "/"},
+               {"http.host", ""},
+               {"http.scheme", :http},
+               {"http.client_ip", "127.0.0.1"},
+               {"net.host.port", 80}
+             ],
+             &(&1 in attributes)
+           )
   end
-  
+
   def flush_mailbox do
     receive do
       _ -> flush_mailbox()

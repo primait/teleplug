@@ -1,6 +1,5 @@
 import Config
 
-
 config :opentelemetry,
   sampler: {:always_on, %{}},
   tracer: :otel_tracer_default,
