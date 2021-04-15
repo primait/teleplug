@@ -9,7 +9,15 @@ defmodule Teleplug do
 
   alias Plug.Conn
 
+  require Logger
   require OpenTelemetry.Tracer, as: Tracer
+  require Record
+
+  @span_ctx_fields Record.extract(:span_ctx,
+                     from_lib: "opentelemetry_api/include/opentelemetry.hrl"
+                   )
+
+  Record.defrecord(:span_ctx, @span_ctx_fields)
 
   @behaviour Plug
 
@@ -36,6 +44,11 @@ defmodule Teleplug do
       )
 
     Tracer.set_current_span(new_ctx)
+
+    Logger.metadata(
+      trace_id: span_ctx(new_ctx, :trace_id),
+      span_id: span_ctx(new_ctx, :span_id)
+    )
 
     Conn.register_before_send(conn, fn conn ->
       Tracer.set_attribute("http.status_code", conn.status)
