@@ -19,16 +19,16 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/teleplug](https://hexdocs.pm/teleplug).
 
+## Use
 
-## Use 
-
-In your pipeline add 
+In your pipeline(`router.ex` or `endpoint.ex`) add
 
 ```
 plug TelePlug
 ```
 
-or 
+or
+
 ```
 plug TelePlug, service_name: "my_name"
 ```
