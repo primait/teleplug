@@ -29,7 +29,8 @@ defmodule Teleplug.MixProject do
       {:plug, "~> 1.11"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:telepoison, "~> 0.1.2", optional: true}
     ]
   end
 
