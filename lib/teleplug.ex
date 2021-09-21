@@ -34,6 +34,8 @@ defmodule Teleplug do
         http_server_attributes(conn) ++
         network_attributes(conn)
 
+    parent_ctx = Tracer.current_span_ctx()
+    
     new_ctx =
       Tracer.start_span(
         conn.request_path,
@@ -53,6 +55,8 @@ defmodule Teleplug do
     Conn.register_before_send(conn, fn conn ->
       Tracer.set_attribute("http.status_code", conn.status)
       Tracer.end_span()
+
+      Tracer.set_current_span(parent_ctx)
       conn
     end)
   end
