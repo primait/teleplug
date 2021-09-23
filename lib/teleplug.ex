@@ -21,7 +21,7 @@ defmodule Teleplug do
   def init(opts), do: opts
 
   @impl true
-  def call(conn, opts) do
+  def call(conn, _opts) do
     :otel_propagator.text_map_extract(conn.req_headers)
 
     attributes =
