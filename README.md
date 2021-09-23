@@ -27,8 +27,3 @@ In your pipeline add
 ```
 plug TelePlug
 ```
-
-or 
-```
-plug TelePlug, service_name: "my_name"
-```
