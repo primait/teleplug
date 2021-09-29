@@ -29,7 +29,7 @@ defmodule TeleplugTest do
   end
 
   test "teleplug attributes " do
-    opts = Teleplug.init(service_name: :name)
+    opts = Teleplug.init([])
 
     Tracer.with_span "test" do
       conn =
@@ -50,7 +50,6 @@ defmodule TeleplugTest do
     assert Enum.all?(
              [
                {"http.status_code", nil},
-               {"service.name", :name},
                {"http.method", "GET"},
                {"http.route", "/"},
                {"http.target", "/"},
