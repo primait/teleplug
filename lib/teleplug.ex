@@ -25,12 +25,12 @@ defmodule Teleplug do
     :otel_propagator.text_map_extract(conn.req_headers)
 
     attributes =
-        http_common_attributes(conn) ++
+      http_common_attributes(conn) ++
         http_server_attributes(conn) ++
         network_attributes(conn)
 
     parent_ctx = Tracer.current_span_ctx()
-    
+
     new_ctx =
       Tracer.start_span(
         conn.request_path,
