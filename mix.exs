@@ -4,7 +4,7 @@ defmodule Teleplug.MixProject do
   def project do
     [
       app: :teleplug,
-      version: "1.0.0-rc.1",
+      version: "1.0.0-rc.2",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -23,11 +23,16 @@ defmodule Teleplug.MixProject do
   defp deps do
     [
       {:opentelemetry_api, "~> 1.0.0-rc.2"},
-      {:opentelemetry, "~> 1.0.0-rc.2", only: :test},
-      {:plug, "~> 1.11"},
+      {:plug, "~> 1.11"}
+    ] ++ dev_deps()
+  end
+
+  def dev_deps do
+    [
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:opentelemetry, "~> 1.0.0-rc.2", only: :test}
     ]
   end
 

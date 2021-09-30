@@ -1,10 +1,6 @@
 defmodule Teleplug do
   @moduledoc """
   Simple opentelementry instrumented plug.
-
-  ## Options
-
-  The only option that can be passed is the `service_name`, defaults on the application name
   """
 
   alias Plug.Conn
@@ -25,17 +21,16 @@ defmodule Teleplug do
   def init(opts), do: opts
 
   @impl true
-  def call(conn, opts) do
+  def call(conn, _opts) do
     :otel_propagator.text_map_extract(conn.req_headers)
 
     attributes =
-      [{"service.name", service_name(opts)}] ++
-        http_common_attributes(conn) ++
+      http_common_attributes(conn) ++
         http_server_attributes(conn) ++
         network_attributes(conn)
 
     parent_ctx = Tracer.current_span_ctx()
-    
+
     new_ctx =
       Tracer.start_span(
         conn.request_path,
@@ -59,10 +54,6 @@ defmodule Teleplug do
       Tracer.set_current_span(parent_ctx)
       conn
     end)
-  end
-
-  defp service_name(opts) do
-    Keyword.get(opts, :service_name) || Application.get_application(__MODULE__)
   end
 
   # see https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/http.md#common-attributes
