@@ -31,14 +31,9 @@ defmodule Teleplug do
 
     parent_ctx = Tracer.current_span_ctx()
 
-    new_ctx =
-      Tracer.start_span(
-        conn.request_path,
-        %{
-          kind: :server,
-          attributes: attributes
-        }
-      )
+    route = Teleplug.Instrumentation.get_route(conn.request_path)
+
+    new_ctx = Tracer.start_span(route, %{kind: :server, attributes: attributes})
 
     Tracer.set_current_span(new_ctx)
 

@@ -23,7 +23,8 @@ defmodule Teleplug.MixProject do
   defp deps do
     [
       {:opentelemetry_api, "~> 1.0.0-rc.2"},
-      {:plug, "~> 1.11"}
+      {:plug, "~> 1.11"},
+      {:telemetry, "~> 0.4"}
     ] ++ dev_deps()
   end
 
