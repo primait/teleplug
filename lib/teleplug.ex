@@ -17,6 +17,8 @@ defmodule Teleplug do
 
   @behaviour Plug
 
+  defdelegate setup, to: Teleplug.Instrumentation
+
   @impl true
   def init(opts), do: opts
 
