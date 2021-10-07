@@ -4,7 +4,7 @@ defmodule Teleplug.MixProject do
   def project do
     [
       app: :teleplug,
-      version: "1.0.0-rc.2",
+      version: "1.0.0-rc.3",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -23,7 +23,8 @@ defmodule Teleplug.MixProject do
   defp deps do
     [
       {:opentelemetry_api, "~> 1.0.0-rc.2"},
-      {:plug, "~> 1.11"}
+      {:plug, "~> 1.11"},
+      {:telemetry, "~> 0.4"}
     ] ++ dev_deps()
   end
 
