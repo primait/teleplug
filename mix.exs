@@ -12,7 +12,6 @@ defmodule Teleplug.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
-      description: description(),
       aliases: aliases(),
       docs: docs()
     ]
@@ -37,12 +36,14 @@ defmodule Teleplug.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:opentelemetry, "~> 1.0.0-rc.2", only: :test}
+      {:opentelemetry, "~> 1.0.0-rc.2", only: :test},
+      {:opentelemetry_exporter, "~> 1.0.0-rc.1", only: :test}
     ]
   end
 
   def package do
     [
+      description: "Teleplug is a dead simple opentelemetry-instrumented plug.",
       name: "teleplug",
       maintainer: ["prima.it"],
       licences: ["MIT"],
@@ -58,11 +59,6 @@ defmodule Teleplug.MixProject do
     ]
   end
 
-  def description do
-    "Teleplug is a dead simple opentelemetry-instrumented plug."
-  end
-
-  
   defp docs do
     [
       extras: [
