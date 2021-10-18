@@ -46,7 +46,7 @@ defmodule Teleplug.MixProject do
       description: "Teleplug is a dead simple opentelemetry-instrumented plug.",
       name: "teleplug",
       maintainer: ["prima.it"],
-      licences: ["MIT"],
+      licenses: ["MIT"],
       links: %{"Github" => "https://github.com/primait/teleplug"}
     ]
   end
