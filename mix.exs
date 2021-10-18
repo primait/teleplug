@@ -1,16 +1,20 @@
 defmodule Teleplug.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/primait/teleplug"
+  @version "1.0.0-rc.5"
+
   def project do
     [
       app: :teleplug,
-      version: "1.0.0-rc.5",
+      version: @version,
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
       description: description(),
-      aliases: aliases()
+      aliases: aliases(),
+      docs: docs()
     ]
   end
 
@@ -56,5 +60,19 @@ defmodule Teleplug.MixProject do
 
   def description do
     "Teleplug is a dead simple opentelemetry-instrumented plug."
+  end
+
+  
+  defp docs do
+    [
+      extras: [
+        "LICENSE.md": [title: "License"],
+        "README.md": [title: "Overview"]
+      ],
+      main: "readme",
+      source_url: @source_url,
+      source_ref: "v#{@version}",
+      formatters: ["html"]
+    ]
   end
 end
