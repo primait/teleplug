@@ -25,7 +25,7 @@ defmodule Teleplug.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:opentelemetry_api, "~> 1.0.0-rc.2"},
+      {:opentelemetry_api, "~> 1.0.0-rc.3"},
       {:plug, "~> 1.11"},
       {:telemetry, "~> 0.4 or ~> 1.0.0"}
     ] ++ dev_deps()
@@ -36,8 +36,8 @@ defmodule Teleplug.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:opentelemetry, "~> 1.0.0-rc.2", only: :test},
-      {:opentelemetry_exporter, "~> 1.0.0-rc.1", only: :test}
+      {:opentelemetry, "~> 1.0.0-rc.3", only: :test},
+      {:opentelemetry_exporter, "~> 1.0.0-rc.3", only: :test}
     ]
   end
 
