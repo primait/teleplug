@@ -1,9 +1,9 @@
 # Teleplug
-[![Module Version](https://img.shields.io/hexpm/v/prima_opentelemetry_ex.svg)](https://hex.pm/packages/prima_opentelemetry_ex)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/telepoison/)
-[![Total Download](https://img.shields.io/hexpm/dt/telepoison.svg)](https://hex.pm/packages/telepoison)
-[![License](https://img.shields.io/hexpm/l/telepoison.svg)](https://github.com/primait/telepoison/blob/master/LICENSE.md)
-[![Last Updated](https://img.shields.io/github/last-commit/primait/telepoison.svg)](https://github.com/primait/telepoison/commits/master)
+[![Module Version](https://img.shields.io/hexpm/v/teleplug.svg)](https://hex.pm/packages/teleplug)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/teleplug/)
+[![Total Download](https://img.shields.io/hexpm/dt/teleplug.svg)](https://hex.pm/packages/teleplug)
+[![License](https://img.shields.io/hexpm/l/teleplug.svg)](https://github.com/primait/teleplug/blob/master/LICENSE.md)
+[![Last Updated](https://img.shields.io/github/last-commit/primait/teleplug.svg)](https://github.com/primait/teleplug/commits/master)
 
 Teleplug is a dead simple opentelemetry-instrumented plug.
 
