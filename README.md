@@ -15,7 +15,7 @@ by adding `teleplug` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:teleplug, "~> 0.1.0"}
+    {:teleplug, "~> 1.0.0-rc.6"}
   ]
 end
 ```
