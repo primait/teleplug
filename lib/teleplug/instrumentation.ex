@@ -17,8 +17,6 @@ defmodule Teleplug.Instrumentation do
   ]
 
   def setup do
-    OpenTelemetry.register_application_tracer(:teleplug)
-
     # attach to plug and phoenix route dispatch events so it works when using one or the other
     Enum.each(@start_events, fn event -> attach_to_event(event, &__MODULE__.register_route/4) end)
     Enum.each(@end_events, fn event -> attach_to_event(event, &__MODULE__.unregister_route/4) end)
