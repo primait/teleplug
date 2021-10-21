@@ -58,19 +58,21 @@ defmodule Teleplug do
          %Conn{
            adapter: adapter,
            method: method,
-           request_path: request_path,
            scheme: scheme
          } = conn
-       ),
-       do: [
-         {"http.method", method},
-         {"http.route", request_path},
-         {"http.target", http_target(conn)},
-         {"http.host", header_value(conn, "host")},
-         {"http.scheme", scheme},
-         {"http.flavor", http_flavor(adapter)},
-         {"http.user_agent", header_value(conn, "user-agent")}
-       ]
+       ) do
+    route = Teleplug.Instrumentation.get_route(conn.request_path)
+
+    [
+      {"http.method", method},
+      {"http.route", route},
+      {"http.target", http_target(conn)},
+      {"http.host", header_value(conn, "host")},
+      {"http.scheme", scheme},
+      {"http.flavor", http_flavor(adapter)},
+      {"http.user_agent", header_value(conn, "user-agent")}
+    ]
+  end
 
   # see https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/http.md#http-server-semantic-conventions
   defp http_server_attributes(conn),
