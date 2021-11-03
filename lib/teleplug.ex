@@ -17,7 +17,7 @@ defmodule Teleplug do
   def init(opts), do: opts
 
   @impl true
-  def call(conn, _opts) do
+  def call(conn, opts) do
     :otel_propagator_text_map.extract(conn.req_headers)
 
     attributes =
@@ -33,14 +33,14 @@ defmodule Teleplug do
 
     Tracer.set_current_span(new_ctx)
 
-    set_logger_metadata(new_ctx)
+    set_logger_metadata(new_ctx, opts)
 
     Conn.register_before_send(conn, fn conn ->
       Tracer.set_attribute("http.status_code", conn.status)
       Tracer.end_span()
 
       Tracer.set_current_span(parent_ctx)
-      set_logger_metadata(parent_ctx)
+      set_logger_metadata(parent_ctx, opts)
       conn
     end)
   end
@@ -117,20 +117,24 @@ defmodule Teleplug do
     end
   end
 
-  defp set_logger_metadata(:undefined), do: Logger.metadata(trace_id: nil, span_id: nil, dd: nil)
+  defp set_logger_metadata(:undefined, _opts),
+    do: Logger.metadata(trace_id: nil, span_id: nil, dd: nil, service: nil)
 
-  defp set_logger_metadata(span_ctx) do
+  defp set_logger_metadata(span_ctx, opts) do
     trace_id = :otel_span.trace_id(span_ctx)
     span_id = :otel_span.span_id(span_ctx)
 
-    Logger.metadata(
+    metadata = [
       trace_id: trace_id,
       span_id: span_id,
       dd: [
         trace_id: datadog_trace_id(trace_id),
         span_id: datadog_span_id(span_id)
-      ]
-    )
+      ],
+      service: Keyword.get(opts, :service_name)
+    ]
+
+    Logger.metadata(metadata)
   end
 
   # converts trace_id to a datadog understandable format (taking the 2nd half of the 128 bits string)
