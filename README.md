@@ -29,8 +29,16 @@ be found at [https://hexdocs.pm/teleplug](https://hexdocs.pm/teleplug).
 
 In your pipeline add 
 
-```
+```elixir
 plug TelePlug
+```
+
+## Service name in umbrella apps
+
+The `service.name` opentelemetry resource-related span tag (and his cousin the `service` logger metadata) should be set from outside the library (from ENV vars) and should be the same for the whole beam; when running umbrella applications in production though, you may want to treat them as different service for whatever reason. To do so, you can simply pass the `:service_name` opt to the plug, e.g.
+
+```elixir
+plug TelePlug, service_name: "my_custom_name"
 ```
 
 ## Copyright and License
