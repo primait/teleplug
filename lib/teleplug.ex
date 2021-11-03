@@ -23,7 +23,7 @@ defmodule Teleplug do
     attributes =
       http_common_attributes(conn) ++
         http_server_attributes(conn) ++
-        network_attributes(conn)
+        network_attributes(conn) ++ service_name(opts)
 
     parent_ctx = Tracer.current_span_ctx()
 
@@ -114,6 +114,13 @@ defmodule Teleplug do
 
       [client | _] ->
         client
+    end
+  end
+
+  defp service_name(opts) do
+    case Keyword.get(opts, :service_name) do
+      nil -> []
+      service_name -> [{"service.name", service_name}]
     end
   end
 
