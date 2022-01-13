@@ -8,7 +8,7 @@ defmodule Teleplug.MixProject do
     [
       app: :teleplug,
       version: @version,
-      elixir: "~> 1.10",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
