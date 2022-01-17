@@ -1,4 +1,5 @@
 # Teleplug
+
 [![Module Version](https://img.shields.io/hexpm/v/teleplug.svg)](https://hex.pm/packages/teleplug)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/teleplug/)
 [![Total Download](https://img.shields.io/hexpm/dt/teleplug.svg)](https://hex.pm/packages/teleplug)
@@ -15,7 +16,7 @@ by adding `teleplug` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:teleplug, "~> 1.0.0-rc.6"}
+    {:teleplug, "~> 1.0.0"}
   ]
 end
 ```
@@ -24,10 +25,9 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/teleplug](https://hexdocs.pm/teleplug).
 
+## Use
 
-## Use 
-
-In your pipeline add 
+In your pipeline add
 
 ```
 plug TelePlug
@@ -39,4 +39,3 @@ Copyright (c) 2020 Prima.it
 
 This work is free. You can redistribute it and/or modify it under the
 terms of the MIT License. See the [LICENSE.md](./LICENSE.md) file for more details.
-
