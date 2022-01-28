@@ -58,7 +58,7 @@ defmodule TeleplugTest do
                {"http.client_ip", "127.0.0.1"},
                {"net.host.port", 80}
              ],
-             &(&1 in attributes)
+             &(&1 in elem(attributes, 4))
            )
   end
 
