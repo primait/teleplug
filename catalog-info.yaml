@@ -7,7 +7,7 @@ spec:
   system: prima.it
 metadata:
   name: teleplug 
-  description: 
+  description: a simple opentelemetry-instrumented plug.
   tags:
   - elixir
   links:
@@ -18,7 +18,3 @@ metadata:
   - url: https://hexdocs.pm/teleplug
     icon: link
     title: official documentation
-
-  - url: https://github.com/primait/teleplug
-    icon: github
-    title: github repository
