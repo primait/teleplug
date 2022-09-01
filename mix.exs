@@ -25,7 +25,7 @@ defmodule Teleplug.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:opentelemetry_api, "~> 1.0.0"},
+      {:opentelemetry_api, "~> 1.1.0"},
       {:plug, "~> 1.11"},
       {:telemetry, "~> 0.4 or ~> 1.0.0"}
     ] ++ dev_deps()
