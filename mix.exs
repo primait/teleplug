@@ -37,7 +37,7 @@ defmodule Teleplug.MixProject do
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:opentelemetry, "~> 1.0.0", only: :test},
-      {:opentelemetry_exporter, "~> 1.0.0", only: :test}
+      {:opentelemetry_exporter, "~> 1.1.0", only: :test}
     ]
   end
 
