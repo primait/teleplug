@@ -45,21 +45,19 @@ defmodule TeleplugTest do
         end)
     end
 
-    assert_receive {:span, span(attributes: attributes)}, 1_000
+    assert_receive {:span, span(attributes: attributes_record)}, 1_000
+    assert {:attributes, _, _, _, attributes} = attributes_record
 
-    assert Enum.all?(
-             [
-               {"http.status_code", nil},
-               {"http.method", "GET"},
-               {"http.route", "/"},
-               {"http.target", "/"},
-               {"http.host", ""},
-               {"http.scheme", :http},
-               {"http.client_ip", "127.0.0.1"},
-               {"net.host.port", 80}
-             ],
-             &(&1 in elem(attributes, 4))
-           )
+    assert %{
+             "http.status_code" => nil,
+             "http.method" => "GET",
+             "http.route" => "/",
+             "http.target" => "/",
+             "http.host" => "",
+             "http.scheme" => :http,
+             "http.client_ip" => "127.0.0.1",
+             "net.host.port" => 80
+           } = attributes
   end
 
   def flush_mailbox do
