@@ -16,4 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   If you're upgrading to Teleplug 1.1.0, it is therefore recommended to also upgrade to OpenTelemetry API 1.1.0
 
 [Unreleased]: https://github.com/primait/teleplug/compare/1.1.0...HEAD
-[1.1.0]: https://github.com/primait/paperboy/releases/tag/1.1.0
+[1.1.0]: https://github.com/primait/teleplug/releases/tag/1.1.0
