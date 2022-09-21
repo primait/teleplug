@@ -33,14 +33,11 @@ defmodule Teleplug do
 
     Tracer.set_current_span(new_ctx)
 
-    set_logger_metadata(new_ctx)
-
     Conn.register_before_send(conn, fn conn ->
       Tracer.set_attribute("http.status_code", conn.status)
       Tracer.end_span()
 
       Tracer.set_current_span(parent_ctx)
-      set_logger_metadata(parent_ctx)
       conn
     end)
   end
@@ -116,28 +113,4 @@ defmodule Teleplug do
         client
     end
   end
-
-  defp set_logger_metadata(:undefined), do: Logger.metadata(trace_id: nil, span_id: nil, dd: nil)
-
-  defp set_logger_metadata(span_ctx) do
-    trace_id = :otel_span.trace_id(span_ctx)
-    span_id = :otel_span.span_id(span_ctx)
-
-    Logger.metadata(
-      trace_id: trace_id,
-      span_id: span_id,
-      dd: [
-        trace_id: datadog_trace_id(trace_id),
-        span_id: datadog_span_id(span_id)
-      ]
-    )
-  end
-
-  # converts trace_id to a datadog understandable format (taking the 2nd half of the 128 bits string)
-  defp datadog_trace_id(trace_id) do
-    <<_::64, datadog_trace_id::64>> = <<trace_id::128>>
-    to_string(datadog_trace_id)
-  end
-
-  defp datadog_span_id(span_id), do: to_string(span_id)
 end
