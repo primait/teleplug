@@ -39,6 +39,7 @@ defmodule TeleplugTest do
 
       _ =
         conn
+        |> Map.get(:private)
         |> Map.get(:before_send)
         |> Enum.reduce(conn, fn h, c0 ->
           h.(c0)
