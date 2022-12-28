@@ -27,7 +27,7 @@ defmodule Teleplug.MixProject do
     [
       {:opentelemetry_api, "~> 1.1"},
       {:plug, "~> 1.11"},
-      {:telemetry, "~> 0.4 or ~> 1.0.0"}
+      {:telemetry, "~> 0.4 or ~> 1.0.0 or ~> 1.1.0"}
     ] ++ dev_deps()
   end
 
