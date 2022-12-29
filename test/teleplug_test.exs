@@ -12,7 +12,7 @@ defmodule TeleplugTest do
 
   setup do
     flush_mailbox()
-    :otel_batch_processor.set_exporter(:otel_exporter_pid, self())
+    :otel_simple_processor.set_exporter(:otel_exporter_pid, self())
     :ok
   end
 
