@@ -54,7 +54,6 @@ defmodule TeleplugTest do
              "http.method" => "GET",
              "http.route" => "/",
              "http.target" => "/",
-             "http.host" => "",
              "http.scheme" => :http,
              "http.client_ip" => "127.0.0.1",
              "net.host.port" => 80
