@@ -46,7 +46,7 @@ defmodule TeleplugTest do
         end)
     end
 
-    assert_receive {:span, span(attributes: attributes_record)}, 1_000
+    assert_receive {:span, span(attributes: attributes_record, name: "GET /")}, 1_000
     assert {:attributes, _, _, _, attributes} = attributes_record
 
     assert %{
@@ -54,7 +54,6 @@ defmodule TeleplugTest do
              "http.method" => "GET",
              "http.route" => "/",
              "http.target" => "/",
-             "http.host" => "",
              "http.scheme" => :http,
              "http.client_ip" => "127.0.0.1",
              "net.host.port" => 80
