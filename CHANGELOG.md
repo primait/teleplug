@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- `"http.host"` attribute removed from from `http_common_attributes` since it doesn't exist and is covered by `"net.host.name"`
+- `"http.host"` attribute as it is non standard, and already covered by `"net.host.name"`
 
 ## [1.1.0] - 2022-09-21
 
