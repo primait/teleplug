@@ -46,7 +46,7 @@ defmodule TeleplugTest do
         end)
     end
 
-    assert_receive {:span, span(attributes: attributes_record)}, 1_000
+    assert_receive {:span, span(attributes: attributes_record, name: "GET /")}, 1_000
     assert {:attributes, _, _, _, attributes} = attributes_record
 
     assert %{
