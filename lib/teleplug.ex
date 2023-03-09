@@ -42,9 +42,7 @@ defmodule Teleplug do
 
     parent_ctx = Tracer.current_span_ctx()
 
-    route = Teleplug.Instrumentation.get_route(conn.request_path)
-
-    new_ctx = Tracer.start_span(route, %{kind: :server, attributes: attributes})
+    new_ctx = conn |> span_name() |> Tracer.start_span(%{kind: :server, attributes: attributes})
 
     Tracer.set_current_span(new_ctx)
 
@@ -56,6 +54,10 @@ defmodule Teleplug do
       conn
     end)
   end
+
+  # see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/http.md#name
+  defp span_name(conn),
+    do: "#{conn.method} #{Teleplug.Instrumentation.get_route(conn.request_path)}"
 
   # see https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/http.md#common-attributes
   defp http_common_attributes(
