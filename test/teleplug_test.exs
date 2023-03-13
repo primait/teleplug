@@ -64,14 +64,14 @@ defmodule TeleplugTest do
     opts = Teleplug.init([])
 
     :get
-      |> conn("/")
-      |> Teleplug.call(opts)
-      |> Plug.Conn.send_resp(500, "Internal server error")
-      |> Map.get(:private)
-      |> Map.get(:before_send)
-      |> Enum.reduce(fn h, c0 ->
-        h.(c0)
-      end)
+    |> conn("/")
+    |> Teleplug.call(opts)
+    |> Plug.Conn.send_resp(500, "Internal server error")
+    |> Map.get(:private)
+    |> Map.get(:before_send)
+    |> Enum.reduce(fn h, c0 ->
+      h.(c0)
+    end)
 
     assert_receive {:span, span(status: {:status, :error, ""})}, 1_000
   end
