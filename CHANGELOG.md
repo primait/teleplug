@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
----
+### Added
+
+- Set span status to error if the returned http status code is 5xx
 
 ## [1.1.1] - 2023-03-09
 
