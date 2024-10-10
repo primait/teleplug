@@ -26,7 +26,7 @@ defmodule Teleplug.MixProject do
   defp deps do
     [
       {:opentelemetry_api, "~> 1.1"},
-      {:opentelemetry_semantic_conventions, "~> 0.2"},
+      {:opentelemetry_semantic_conventions, "~> 1.27"},
       {:plug, "~> 1.11"},
       {:telemetry, "~> 0.4 or ~> 1.0"}
     ] ++ dev_deps()
