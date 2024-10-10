@@ -10,7 +10,18 @@ and this project adheres to
 
 ### Changed
 
--
+- Removed the following, in favour of
+  - `http.client.ip` => `client.address`
+  - `http.flavor` => `network.protocol.name`
+  - `http.method` => `http.request.method`
+  - `http.scheme` => `url.scheme`
+  - `http.status_code` => `http.response.status_code`
+  - `http.target` => split in `url.path` and `url.query`
+  - `http.user.agent` => `user_agent.original`
+  - `net.host.name` => `server.address`
+  - `net.host.port` => `server.port`
+  - `net.sock.peer.port` => `network.peer.port`
+  - `net.sock.peer.addr` => `network.peer.address`
 
 ---
 

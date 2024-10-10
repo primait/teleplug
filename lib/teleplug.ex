@@ -18,8 +18,6 @@ defmodule Teleplug do
 
   @client_address Atom.to_string(ClientAttributes.client_address())
 
-  @network_protocol_name Atom.to_string(NetworkAttributes.network_protocol_name())
-
   @http_request_method Atom.to_string(HTTPAttributes.http_request_method())
   @http_response_status_code Atom.to_string(HTTPAttributes.http_response_status_code())
   @http_route Atom.to_string(HTTPAttributes.http_route())
@@ -35,6 +33,7 @@ defmodule Teleplug do
 
   @network_peer_address Atom.to_string(NetworkAttributes.network_peer_address())
   @network_peer_port Atom.to_string(NetworkAttributes.network_peer_port())
+  @network_protocol_name Atom.to_string(NetworkAttributes.network_protocol_name())
 
   @behaviour Plug
 
