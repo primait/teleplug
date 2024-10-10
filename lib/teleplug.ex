@@ -6,23 +6,35 @@ defmodule Teleplug do
   alias Plug.Conn
 
   require Logger
-  require OpenTelemetry.SemanticConventions.Trace, as: Conventions
+  require OpenTelemetry.SemConv.ClientAttributes, as: ClientAttributes
+  require OpenTelemetry.SemConv.HTTPAttributes, as: HTTPAttributes
+  require OpenTelemetry.SemConv.NetworkAttributes, as: NetworkAttributes
+  require OpenTelemetry.SemConv.ServerAttributes, as: ServerAttributes
+  require OpenTelemetry.SemConv.URLAttributes, as: URLAttributes
+  require OpenTelemetry.SemConv.UserAgentAttributes, as: UserAgentAttributes
+
   require OpenTelemetry.Tracer, as: Tracer
   require Record
 
-  @http_client_ip Atom.to_string(Conventions.http_client_ip())
-  @http_flavor Atom.to_string(Conventions.http_flavor())
-  @http_method Atom.to_string(Conventions.http_method())
-  @http_route Atom.to_string(Conventions.http_route())
-  @http_scheme Atom.to_string(Conventions.http_scheme())
-  @http_status_code Atom.to_string(Conventions.http_status_code())
-  @http_target Atom.to_string(Conventions.http_target())
-  @http_user_agent Atom.to_string(Conventions.http_user_agent())
+  @client_address Atom.to_string(ClientAttributes.client_address())
 
-  @net_host_name Atom.to_string(Conventions.net_host_name())
-  @net_host_port Atom.to_string(Conventions.net_host_port())
-  @net_sock_peer_port Atom.to_string(Conventions.net_sock_peer_port())
-  @net_sock_peer_addr Atom.to_string(Conventions.net_sock_peer_addr())
+  @network_protocol_name Atom.to_string(NetworkAttributes.network_protocol_name())
+
+  @http_request_method Atom.to_string(HTTPAttributes.http_request_method())
+  @http_response_status_code Atom.to_string(HTTPAttributes.http_response_status_code())
+  @http_route Atom.to_string(HTTPAttributes.http_route())
+
+  @url_path Atom.to_string(URLAttributes.url_path())
+  @url_query Atom.to_string(URLAttributes.url_query())
+  @url_scheme Atom.to_string(URLAttributes.url_scheme())
+
+  @user_agent_original Atom.to_string(UserAgentAttributes.user_agent_original())
+
+  @server_address Atom.to_string(ServerAttributes.server_address())
+  @server_port Atom.to_string(ServerAttributes.server_port())
+
+  @network_peer_address Atom.to_string(NetworkAttributes.network_peer_address())
+  @network_peer_port Atom.to_string(NetworkAttributes.network_peer_port())
 
   @behaviour Plug
 
@@ -52,7 +64,7 @@ defmodule Teleplug do
         Tracer.set_status(:error, "")
       end
 
-      Tracer.set_attribute(@http_status_code, conn.status)
+      Tracer.set_attribute(@http_response_status_code, conn.status)
       Tracer.end_span()
 
       Tracer.set_current_span(parent_ctx)
@@ -67,7 +79,6 @@ defmodule Teleplug do
   # see https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/http.md#common-attributes
   defp http_common_attributes(
          %Conn{
-           adapter: adapter,
            method: method,
            scheme: scheme
          } = conn
@@ -75,22 +86,23 @@ defmodule Teleplug do
     route = Teleplug.Instrumentation.get_route(conn.request_path)
 
     [
-      {@http_method, method},
+      {@http_request_method, method},
       {@http_route, route},
-      {@http_target, http_target(conn)},
-      {@http_scheme, scheme},
-      {@http_flavor, http_flavor(adapter)},
-      {@http_user_agent, header_value(conn, "user-agent")}
+      {@url_path, url_path(conn)},
+      {@url_scheme, scheme},
+      {@url_query, url_query(conn)},
+      {@user_agent_original, header_value(conn, "user-agent")}
     ]
   end
 
   # see https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/http.md#http-server-semantic-conventions
   defp http_server_attributes(conn),
-    do: [{@http_client_ip, client_ip(conn)}]
+    do: [{@client_address, client_ip(conn)}]
 
   # see https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/span-general.md#general-network-connection-attributes
   defp network_attributes(
          %Conn{
+           adapter: adapter,
            host: host,
            port: port
          } = conn
@@ -98,18 +110,20 @@ defmodule Teleplug do
     peer_data = Plug.Conn.get_peer_data(conn)
 
     [
-      {@net_sock_peer_addr, peer_data |> Map.get(:address) |> :inet_parse.ntoa() |> to_string()},
-      {@net_sock_peer_port, Map.get(peer_data, :port)},
-      {@net_host_name, host},
-      {@net_host_port, port}
+      {@network_peer_address,
+       peer_data |> Map.get(:address) |> :inet_parse.ntoa() |> to_string()},
+      {@network_peer_port, Map.get(peer_data, :port)},
+      {@network_protocol_name, network_protocol_name(adapter)},
+      {@server_address, host},
+      {@server_port, port}
     ]
   end
 
-  defp http_target(%Conn{request_path: request_path, query_string: ""}),
+  defp url_path(%Conn{request_path: request_path}),
     do: request_path
 
-  defp http_target(%Conn{request_path: request_path, query_string: query_string}),
-    do: "#{request_path}?#{query_string}"
+  defp url_query(%Conn{query_string: query_string}),
+    do: query_string
 
   defp header_value(conn, header),
     do:
@@ -118,7 +132,7 @@ defmodule Teleplug do
       |> List.first()
       |> to_string()
 
-  defp http_flavor({_adapter_name, meta}),
+  defp network_protocol_name({_adapter_name, meta}),
     do:
       meta
       |> Map.get(:version)
