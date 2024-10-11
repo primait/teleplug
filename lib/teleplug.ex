@@ -5,13 +5,14 @@ defmodule Teleplug do
 
   alias Plug.Conn
 
+  alias OpenTelemetry.SemConv.ClientAttributes
+  alias OpenTelemetry.SemConv.HTTPAttributes
+  alias OpenTelemetry.SemConv.NetworkAttributes
+  alias OpenTelemetry.SemConv.ServerAttributes
+  alias OpenTelemetry.SemConv.URLAttributes
+  alias OpenTelemetry.SemConv.UserAgentAttributes
+
   require Logger
-  require OpenTelemetry.SemConv.ClientAttributes, as: ClientAttributes
-  require OpenTelemetry.SemConv.HTTPAttributes, as: HTTPAttributes
-  require OpenTelemetry.SemConv.NetworkAttributes, as: NetworkAttributes
-  require OpenTelemetry.SemConv.ServerAttributes, as: ServerAttributes
-  require OpenTelemetry.SemConv.URLAttributes, as: URLAttributes
-  require OpenTelemetry.SemConv.UserAgentAttributes, as: UserAgentAttributes
 
   require OpenTelemetry.Tracer, as: Tracer
   require Record
