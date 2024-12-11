@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+---
+
+## [2.0.0] - 2024-12-11
+
 ### Changed
 
 - Removed the following, in favour of
@@ -65,7 +69,9 @@ and this project adheres to
   If you're upgrading to Teleplug 1.1.0, it is therefore recommended to also
   upgrade to OpenTelemetry API 1.1.0
 
-[Unreleased]: https://github.com/primait/teleplug/compare/1.1.3...HEAD
+
+[Unreleased]: https://github.com/primait/teleplug/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/primait/teleplug/compare/1.1.3-rc.0...2.0.0
 [1.1.3]: https://github.com/primait/teleplug/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/primait/teleplug/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/primait/teleplug/compare/1.1.0...1.1.1

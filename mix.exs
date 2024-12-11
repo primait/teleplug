@@ -2,7 +2,7 @@ defmodule Teleplug.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/primait/teleplug"
-  @version "1.1.3-rc.0"
+  @version "2.0.0"
 
   def project do
     [
