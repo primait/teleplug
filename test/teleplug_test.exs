@@ -50,13 +50,19 @@ defmodule TeleplugTest do
     assert {:attributes, _, _, _, attributes} = attributes_record
 
     assert %{
-             "http.status_code" => nil,
-             "http.method" => "GET",
              "http.route" => "/",
-             "http.target" => "/",
-             "http.scheme" => :http,
-             "http.client_ip" => "127.0.0.1",
-             "net.host.port" => 80
+             "client.address" => "127.0.0.1",
+             "http.request.method" => "GET",
+             "http.response.status_code" => nil,
+             "network.peer.address" => "127.0.0.1",
+             "network.peer.port" => 111_317,
+             "network.protocol.name" => "",
+             "server.address" => "www.example.com",
+             "server.port" => 80,
+             "url.path" => "/",
+             "url.query" => "",
+             "url.scheme" => :http,
+             "user_agent.original" => ""
            } = attributes
   end
 
