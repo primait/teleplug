@@ -59,13 +59,15 @@ defmodule Teleplug do
     Tracer.set_current_span(new_ctx)
 
     Conn.register_before_send(conn, fn conn ->
+      Tracer.set_current_span(new_ctx)
+
       # https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/trace/semantic_conventions/http.md#status
       if conn.status >= 500 do
         Tracer.set_status(:error, "")
       end
 
       Tracer.set_attribute(@http_response_status_code, conn.status)
-      Tracer.end_span()
+      Tracer.end_span(new_ctx)
 
       Tracer.set_current_span(parent_ctx)
       conn
