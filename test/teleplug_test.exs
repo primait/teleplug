@@ -69,6 +69,41 @@ defmodule TeleplugTest do
     assert_receive {:span, span(status: {:status, :error, ""})}, 1_000
   end
 
+  test "teleplug submits span if process is killed before sending response" do
+    child =
+      spawn(fn ->
+        opts = Teleplug.init([])
+
+        conn =
+          :get
+          |> conn("/")
+          |> Teleplug.call(opts)
+
+        Process.sleep(:infinity)
+        Plug.Conn.send_resp(conn, 200, "ok")
+      end)
+
+    Process.exit(child, :kill)
+
+    assert_receive {:span, span(attributes: attributes_record, name: "GET /")}, 1_000
+    assert {:attributes, _, _, _, attributes} = attributes_record
+
+    assert %{
+             "http.route" => "/",
+             "client.address" => "127.0.0.1",
+             "http.request.method" => "GET",
+             "http.response.status_code" => 200,
+             "network.peer.address" => "127.0.0.1",
+             "network.peer.port" => 111_317,
+             "network.protocol.name" => "",
+             "server.address" => "www.example.com",
+             "server.port" => 80,
+             "url.path" => "/",
+             "url.query" => "",
+             "url.scheme" => :http,
+           } = attributes
+  end
+
   def flush_mailbox do
     receive do
       _ -> flush_mailbox()
