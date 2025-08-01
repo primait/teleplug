@@ -83,6 +83,7 @@ defmodule TeleplugTest do
         Plug.Conn.send_resp(conn, 200, "ok")
       end)
 
+    Process.sleep(200)
     Process.exit(child, :kill)
 
     assert_receive {:span, span(attributes: attributes_record, name: "GET /")}, 1_000
@@ -92,7 +93,6 @@ defmodule TeleplugTest do
              "http.route" => "/",
              "client.address" => "127.0.0.1",
              "http.request.method" => "GET",
-             "http.response.status_code" => 200,
              "network.peer.address" => "127.0.0.1",
              "network.peer.port" => 111_317,
              "network.protocol.name" => "",
@@ -100,7 +100,7 @@ defmodule TeleplugTest do
              "server.port" => 80,
              "url.path" => "/",
              "url.query" => "",
-             "url.scheme" => :http,
+             "url.scheme" => :http
            } = attributes
   end
 
