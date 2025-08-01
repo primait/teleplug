@@ -1,6 +1,6 @@
 defmodule TeleplugTest do
   use ExUnit.Case, async: true
-  use Plug.Test
+  import Plug.Test
 
   require OpenTelemetry.Tracer, as: Tracer
   require Record
