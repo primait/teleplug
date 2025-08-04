@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- Spans not being submitted if the handler process is killed(eg. if client disconnects)
+
 ---
 
 ## [2.0.0] - 2024-12-11
