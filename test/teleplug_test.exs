@@ -1,6 +1,6 @@
 defmodule TeleplugTest do
   use ExUnit.Case, async: true
-  use Plug.Test
+  import Plug.Test
 
   require OpenTelemetry.Tracer, as: Tracer
   require Record
@@ -32,18 +32,10 @@ defmodule TeleplugTest do
     opts = Teleplug.init([])
 
     Tracer.with_span "test" do
-      conn =
-        :get
-        |> conn("/")
-        |> Teleplug.call(opts)
-
-      _ =
-        conn
-        |> Map.get(:private)
-        |> Map.get(:before_send)
-        |> Enum.reduce(conn, fn h, c0 ->
-          h.(c0)
-        end)
+      :get
+      |> conn("/")
+      |> Teleplug.call(opts)
+      |> Plug.Conn.send_resp(200, "ok")
     end
 
     assert_receive {:span, span(attributes: attributes_record, name: "GET /")}, 1_000
@@ -53,7 +45,7 @@ defmodule TeleplugTest do
              "http.route" => "/",
              "client.address" => "127.0.0.1",
              "http.request.method" => "GET",
-             "http.response.status_code" => nil,
+             "http.response.status_code" => 200,
              "network.peer.address" => "127.0.0.1",
              "network.peer.port" => 111_317,
              "network.protocol.name" => "",
@@ -73,13 +65,43 @@ defmodule TeleplugTest do
     |> conn("/")
     |> Teleplug.call(opts)
     |> Plug.Conn.send_resp(500, "Internal server error")
-    |> Map.get(:private)
-    |> Map.get(:before_send)
-    |> Enum.reduce(fn h, c0 ->
-      h.(c0)
-    end)
 
     assert_receive {:span, span(status: {:status, :error, ""})}, 1_000
+  end
+
+  test "teleplug submits span if process is killed before sending response" do
+    child =
+      spawn(fn ->
+        opts = Teleplug.init([])
+
+        conn =
+          :get
+          |> conn("/")
+          |> Teleplug.call(opts)
+
+        Process.sleep(:infinity)
+        Plug.Conn.send_resp(conn, 200, "ok")
+      end)
+
+    Process.sleep(200)
+    Process.exit(child, :kill)
+
+    assert_receive {:span, span(attributes: attributes_record, name: "GET /")}, 1_000
+    assert {:attributes, _, _, _, attributes} = attributes_record
+
+    assert %{
+             "http.route" => "/",
+             "client.address" => "127.0.0.1",
+             "http.request.method" => "GET",
+             "network.peer.address" => "127.0.0.1",
+             "network.peer.port" => 111_317,
+             "network.protocol.name" => "",
+             "server.address" => "www.example.com",
+             "server.port" => 80,
+             "url.path" => "/",
+             "url.query" => "",
+             "url.scheme" => :http
+           } = attributes
   end
 
   def flush_mailbox do
