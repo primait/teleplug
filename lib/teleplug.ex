@@ -69,7 +69,10 @@ defmodule Teleplug do
       end
 
       Tracer.set_attribute(@http_response_status_code, conn.status)
-      RequestMonitor.end_span(request_monitor_ref)
+
+      if request_monitor_ref != nil do
+        RequestMonitor.end_span(request_monitor_ref)
+      end
 
       Tracer.set_current_span(parent_ctx)
       conn
