@@ -104,6 +104,27 @@ defmodule TeleplugTest do
            } = attributes
   end
 
+  test "trace propagation as parent" do
+    opts = Teleplug.init([])
+
+    {propagated_span_id, propagation_headers} = Tracer.with_span "propagated" do
+      span_id =
+        OpenTelemetry.Tracer.current_span_ctx()
+        |> OpenTelemetry.Span.span_id()
+      headers = :otel_propagator_text_map.inject([])
+      {span_id, headers}
+    end
+
+    Tracer.with_span "test" do
+      :get
+      |> conn("/")
+      |> Plug.Conn.merge_req_headers(propagation_headers)
+      |> Teleplug.call(opts)
+      |> Plug.Conn.send_resp(200, "ok")
+    end
+
+    assert_receive {:span, span(parent_span_id: ^propagated_span_id, name: "GET /")}, 1_000
+  end
   def flush_mailbox do
     receive do
       _ -> flush_mailbox()
