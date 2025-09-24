@@ -30,7 +30,7 @@ be found at [https://hexdocs.pm/teleplug](https://hexdocs.pm/teleplug).
 In your pipeline add
 
 ```
-plug TelePlug
+plug Teleplug
 ```
 
 ## Copyright and License
