@@ -47,8 +47,8 @@ defmodule Teleplug do
     * trace_propagation_opt(default: `:as_parent`) - configure how trace propagation works.
   """
   @type opts() :: [
-    trace_propagation: trace_propagation_opt()
-  ]
+          trace_propagation: trace_propagation_opt()
+        ]
 
   @typedoc "
   How to handle trace propagation headers:
@@ -61,23 +61,60 @@ defmodule Teleplug do
   @type trace_propagation_opt() :: :as_parent | :as_link | :disabled
 
   @impl true
-  @spec init(opts() | any()) :: opts()
-  def init(opts) when is_list(opts), do: opts
-  def init(_), do: []
+  @spec init(opts() | nil) :: opts()
+  def init(opts) when is_list(opts) do
+    # validate and set defaults for all options
+    {trace_propagation, opts} = Keyword.pop(opts, :trace_propagation, :as_parent)
+
+    if trace_propagation not in [:as_parent, :as_link, :disabled] do
+      raise ArgumentError,
+        message: "invalid trace_propagation configuration value: #{trace_propagation}"
+    end
+
+    unused_keys = Keyword.keys(opts)
+
+    if unused_keys != [] do
+      raise ArgumentError, message: "Unknown teleplug options: #{unused_keys}"
+    end
+
+    [
+      trace_propagation: trace_propagation
+    ]
+  end
+
+  def init(opts) when is_nil(opts), do: init([])
 
   @impl true
   @spec call(Plug.Conn.t(), opts()) :: Plug.Conn.t()
-  def call(conn, _opts) do
-    :otel_propagator_text_map.extract(conn.req_headers)
+  def call(conn, opts) do
+    trace_propagation = Keyword.fetch!(opts, :trace_propagation)
 
     attributes =
       http_common_attributes(conn) ++
         http_server_attributes(conn) ++
         network_attributes(conn)
 
-    parent_ctx = Tracer.current_span_ctx()
+    if trace_propagation == :as_parent do
+      :otel_propagator_text_map.extract(conn.req_headers)
+    end
 
-    new_ctx = conn |> span_name() |> Tracer.start_span(%{kind: :server, attributes: attributes})
+    links =
+      case trace_propagation do
+        :as_link ->
+          OpenTelemetry.Ctx.new()
+          |> :otel_propagator_text_map.extract_to(conn.req_headers)
+          |> OpenTelemetry.Tracer.current_span_ctx()
+          |> OpenTelemetry.link()
+          |> List.wrap()
+
+        _ ->
+          []
+      end
+
+    new_ctx =
+      conn
+      |> span_name()
+      |> Tracer.start_span(%{kind: :server, attributes: attributes, links: links})
 
     Tracer.set_current_span(new_ctx)
 
@@ -95,7 +132,6 @@ defmodule Teleplug do
         RequestMonitor.end_span(request_monitor_ref)
       end
 
-      Tracer.set_current_span(parent_ctx)
       conn
     end)
   end
