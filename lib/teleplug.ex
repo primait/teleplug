@@ -42,10 +42,31 @@ defmodule Teleplug do
 
   defdelegate setup, to: Teleplug.Instrumentation
 
-  @impl true
-  def init(opts), do: opts
+  @typedoc """
+  Configuration options for Teleplug
+    * trace_propagation_opt(default: `:as_parent`) - configure how trace propagation works.
+  """
+  @type opts() :: [
+    trace_propagation: trace_propagation_opt()
+  ]
+
+  @typedoc "
+  How to handle trace propagation headers:
+   - `:as_parent` set the propagated trace span as a parent for the request handler span.
+    Note that if the parent span doesn't exist your trace might be dropped by the opentelemetry collector.
+    If that behaviour is undesirable(eg. when using a public endpoint) you should use the `:as_link` option.
+   - `:as_link` create a [link](https://opentelemetry.io/docs/concepts/signals/traces/#span-links) between the propagated span and the request handler span.
+   - `:disabled` disable trace propagation.
+  "
+  @type trace_propagation_opt() :: :as_parent | :as_link | :disabled
 
   @impl true
+  @spec init(opts() | any()) :: opts()
+  def init(opts) when is_list(opts), do: opts
+  def init(_), do: []
+
+  @impl true
+  @spec call(Plug.Conn.t(), opts()) :: Plug.Conn.t()
   def call(conn, _opts) do
     :otel_propagator_text_map.extract(conn.req_headers)
 

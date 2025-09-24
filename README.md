@@ -33,6 +33,15 @@ In your pipeline add
 plug Teleplug
 ```
 
+There are some options you can pass, for example
+
+```
+plug Teleplug,
+  trace_propagation: :as_link
+```
+
+see the module documentation for details
+
 ## Copyright and License
 
 Copyright (c) 2020 Prima.it
