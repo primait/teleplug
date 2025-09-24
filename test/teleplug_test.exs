@@ -148,7 +148,6 @@ defmodule TeleplugTest do
     assert_receive {:span, span(links: links, name: "GET /")}, 1_000
     assert {:links, _, _, _, _, [link]} = links
     assert {:link, _, ^propagated_span_id, _, _} = link
-    dbg(link)
   end
 
   test "trace propagation disabled" do
