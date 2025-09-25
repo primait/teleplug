@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- `trace_propagation` configuration option, for specifying how traces should be propagated(`:as_parent`(default), `:as_link` and `disabled`)
+
 ---
 
 ## [2.0.1] - 2025-08-04
