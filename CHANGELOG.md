@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+---
+
+## [2.1.0] - 2025-09-25
+
 ### Added
 
 - `trace_propagation` configuration option, for specifying how traces should be propagated(`:as_parent`(default), `:as_link` and `disabled`)
@@ -82,7 +86,9 @@ and this project adheres to
   upgrade to OpenTelemetry API 1.1.0
 
 
-[Unreleased]: https://github.com/primait/teleplug/compare/2.0.1...HEAD
+
+[Unreleased]: https://github.com/primait/teleplug/compare/2.1.0...HEAD
+[2.1.0]: https://github.com/primait/teleplug/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/primait/teleplug/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/primait/teleplug/compare/1.1.3...2.0.0
 [1.1.3]: https://github.com/primait/teleplug/compare/1.1.2...1.1.3
