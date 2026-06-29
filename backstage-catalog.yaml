@@ -1,20 +1,10 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
-spec:
-  type: library
-  lifecycle: production
-  owner: team-developer-experience
-  system: prima.it
 metadata:
-  name: teleplug 
-  description: a simple opentelemetry-instrumented plug.
-  tags:
-  - elixir
-  links:
-  - url: https://hex.pm/packages/teleplug
-    icon: link
-    title: Hex.pm
-
-  - url: https://hexdocs.pm/teleplug
-    icon: link
-    title: official documentation
+  name: "teleplug"
+  description: "Teleplug is a dead simple opentelemetry-instrumented plug"
+spec:
+  type: "library"
+  lifecycle: production
+  owner: "group:default/team-developer-experience"
+  system: prima.it
