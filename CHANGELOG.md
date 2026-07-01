@@ -8,13 +8,18 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade Elixir version to 1.15.8 (OTP 26)
+
 ---
 
 ## [2.1.0] - 2025-09-25
 
 ### Added
 
-- `trace_propagation` configuration option, for specifying how traces should be propagated(`:as_parent`(default), `:as_link` and `disabled`)
+- `trace_propagation` configuration option, for specifying how traces should be
+  propagated(`:as_parent`(default), `:as_link` and `disabled`)
 
 ---
 
@@ -22,7 +27,8 @@ and this project adheres to
 
 ### Fixed
 
-- Spans not being submitted if the handler process is killed(eg. if client disconnects)
+- Spans not being submitted if the handler process is killed(eg. if client
+  disconnects)
 
 ---
 
@@ -84,8 +90,6 @@ and this project adheres to
   [does that automatically since 1.1.0](https://github.com/open-telemetry/opentelemetry-erlang/pull/394).
   If you're upgrading to Teleplug 1.1.0, it is therefore recommended to also
   upgrade to OpenTelemetry API 1.1.0
-
-
 
 [Unreleased]: https://github.com/primait/teleplug/compare/2.1.0...HEAD
 [2.1.0]: https://github.com/primait/teleplug/compare/2.0.1...2.1.0
